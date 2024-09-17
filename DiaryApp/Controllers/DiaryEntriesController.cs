@@ -29,9 +29,20 @@ public class DiaryEntriesController : Controller
     [HttpPost]
     public IActionResult Create(DiaryEntry obj)
     {
-        obj.Created = obj.Created.ToUniversalTime(); // Convert to UTC
-        _db.DiaryEntries.Add(obj);//adds the new diary entry to the database
-        _db.SaveChanges();//saves the changes to the database
-        return RedirectToAction("Index");
+
+        if (obj != null & obj.Title.Length < 3)
+        {
+            ModelState.AddModelError("Title", "Title too short!");
+        }
+        if (ModelState.IsValid)
+        {
+            obj.Created = obj.Created.ToUniversalTime(); // Convert to UTC
+            _db.DiaryEntries.Add(obj);//adds the new diary entry to the database
+            _db.SaveChanges();//saves the changes to the database
+            return RedirectToAction("Index");
+        }
+        return View(obj);
+
+
     }
 }
