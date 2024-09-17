@@ -45,4 +45,82 @@ public class DiaryEntriesController : Controller
 
 
     }
+    [HttpGet]
+    public IActionResult Edit(int? id)
+    {
+        if (id == null || id == 0)
+        {
+            return NotFound();
+        }
+
+
+        DiaryEntry? diaryEntry = _db.DiaryEntries.Find(id);
+
+        if (diaryEntry == null)
+        {
+            return NotFound();
+        }
+
+        return View(_db.DiaryEntries.Find(id));
+    }
+
+    [HttpPost]
+    public IActionResult Edit(DiaryEntry obj)
+    {
+
+        if (obj != null & obj.Title.Length < 3)
+        {
+            ModelState.AddModelError("Title", "Title too short!");
+        }
+        if (ModelState.IsValid)
+        {
+            obj.Created = obj.Created.ToUniversalTime(); // Convert to UTC
+            _db.DiaryEntries.Update(obj);//update the diary entry to the database
+            _db.SaveChanges();//saves the changes to the database
+            return RedirectToAction("Index");
+        }
+        return View(obj);
+
+
+    }
+
+
+    [HttpGet]
+    public IActionResult Delete(int? id)
+    {
+        if (id == null || id == 0)
+        {
+            return NotFound();
+        }
+
+
+        DiaryEntry? diaryEntry = _db.DiaryEntries.Find(id);
+
+        if (diaryEntry == null)
+        {
+            return NotFound();
+        }
+
+        return View(_db.DiaryEntries.Find(id));
+    }
+
+    [HttpPost]
+    public IActionResult Delete(DiaryEntry obj)
+    {
+
+        if (obj != null & obj.Title.Length < 3)
+        {
+            ModelState.AddModelError("Title", "Title too short!");
+        }
+        if (ModelState.IsValid)
+        {
+            obj.Created = obj.Created.ToUniversalTime(); // Convert to UTC
+            _db.DiaryEntries.Remove(obj);//remove the diary entry to the database
+            _db.SaveChanges();//saves the changes to the database
+            return RedirectToAction("Index");
+        }
+        return View(obj);
+
+
+    }
 }
