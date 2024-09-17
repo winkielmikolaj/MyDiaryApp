@@ -32,6 +32,6 @@ public class DiaryEntriesController : Controller
         obj.Created = obj.Created.ToUniversalTime(); // Convert to UTC
         _db.DiaryEntries.Add(obj);//adds the new diary entry to the database
         _db.SaveChanges();//saves the changes to the database
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index");
     }
 }
